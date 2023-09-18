@@ -24,6 +24,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	//middleware
+	//server.Use(middleware.Logger())
+	server.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			apiContext := &Utility.ApiContext{Context: c}
+			return next(apiContext)
+		}
+	})
 
 	//start server
 	server.Start(":" + config.AppConfig.Server.Port)
